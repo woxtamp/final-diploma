@@ -76,28 +76,17 @@ WSGI_APPLICATION = 'orders.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.getenv('db_name'),
-#         'HOST': os.getenv('db_host'),
-#         'PORT': os.getenv('db_port'),
-#         'USER': os.getenv('db_user'),
-#         'PASSWORD': os.getenv('db_password'),
-#     }
-# }
-
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'NAME': os.getenv('db_name'),
+        'HOST': os.getenv('db_host'),
+        'PORT': os.getenv('db_port'),
+        'USER': os.getenv('db_user'),
+        'PASSWORD': os.getenv('db_password'),
     }
 }
+
 AUTH_USER_MODEL = 'backend.User'
 
 # Password validation
