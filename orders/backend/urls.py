@@ -4,7 +4,6 @@ from django.urls import path
 from backend.views import PartnerPriceLoad, CategoryView, ShopView, UserLogin, UserRegister, ProductInfoView, \
     PartnerOrdersView, BasketView, ContactView, OrderView
 
-
 app_name = 'backend'
 
 urlpatterns = [

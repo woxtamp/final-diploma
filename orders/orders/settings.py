@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'backend',
     'django_filters',
     'social_django',
+    'drf_spectacular',
 ]
 
 AUTHENTICATION_BACKENDS = (
@@ -166,7 +167,14 @@ REST_FRAMEWORK = {
         'anon': '1/sec',
         'user': '3/sec'
     },
-    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'API сервиса заказа товаров для розничных сетей',
+    'DESCRIPTION': 'Приложение предназначено для автоматизации закупок в розничной сети',
+    'VERSION': '1.0.0',
 }
 
 LIMIT_CONTACTS = 6
