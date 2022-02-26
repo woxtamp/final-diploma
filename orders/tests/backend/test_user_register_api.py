@@ -1,7 +1,6 @@
 import pytest
 from django.urls import reverse
-from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_404_NOT_FOUND, \
-    HTTP_400_BAD_REQUEST
+from rest_framework.status import HTTP_200_OK
 
 
 # успешная регистрация
@@ -76,7 +75,7 @@ def test_user_register_incorrect_password(api_client, register_incorrect_passwor
 
 # ошибка регистрации при указании уже зарегистрированного адреса почты
 @pytest.mark.django_db
-def test_user_register_correct(api_client, register_correct_payload):
+def test_user_register_already_exist(api_client, register_correct_payload):
     url_register = reverse('backend:user-register')
     api_client.post(url_register, register_correct_payload)
     response = api_client.post(url_register, register_correct_payload)

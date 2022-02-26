@@ -56,6 +56,7 @@ def register_incorrect_password():
         "contacts": "Test"
     }
 
+
 @pytest.fixture
 def register_incorrect_email_payload():
     return {
@@ -66,4 +67,20 @@ def register_incorrect_email_payload():
         "company": "Test",
         "position": "Test",
         "contacts": "Test"
+    }
+
+
+@pytest.fixture
+def login_correct_payload():
+    return {
+        "email": "test@test.com",
+        "password": "Test1234_4321"
+    }
+
+
+@pytest.fixture
+def login_incorrect_password_payload():
+    return {
+        "email": "test@test.com",
+        "password": "Testt1234_4321"
     }
