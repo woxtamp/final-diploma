@@ -273,7 +273,6 @@ class ContactView(APIView):
                                 status=403)
 
         if {'city', 'street', 'house', 'phone'}.issubset(request.data):
-            request.data._mutable = True
             request.data.update({'user': request.user.id})
             serializer = ContactSerializerCreate(data=request.data)
 
@@ -296,7 +295,6 @@ class ContactView(APIView):
                 contact = Contact.objects.filter(id=request.data['id'], user_id=request.user.id).first()
 
                 if contact:
-                    request.data._mutable = True
                     request.data.update({'user': request.user.id})
                     serializer = ContactSerializer(contact, data=request.data, partial=True)
 

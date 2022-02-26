@@ -31,12 +31,6 @@ class ContactSerializer(serializers.ModelSerializer):
             'user': {'write_only': True}
         }
 
-    def validate_phone(self, value):
-        if not re.match(r'^\+\d{1,11}\(\d{3}\)\d{7}', value):
-            raise serializers.ValidationError("Номер телефона не принадлежит российскому оператору связи")
-
-        return value
-
 
 class ContactSerializerCreate(ContactSerializer):
     def validate(self, attrs):
@@ -44,7 +38,7 @@ class ContactSerializerCreate(ContactSerializer):
         list_contact = Contact.objects.filter(user=self.initial_data['user'])
 
         if len(list_contact) >= settings.LIMIT_CONTACTS:
-            raise serializers.ValidationError(f"Контактов не может быть больше, чем  "
+            raise serializers.ValidationError(f"Contacts cannot be more than  "
                                               f"{settings.LIMIT_CONTACTS}")
         return attrs
 

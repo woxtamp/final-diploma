@@ -84,3 +84,32 @@ def login_incorrect_password_payload():
         "email": "test@test.com",
         "password": "Testt1234_4321"
     }
+
+
+@pytest.fixture
+def contact_create_correct():
+    return {
+        "city": "Томск",
+        "street": "Ленина",
+        "house": "1",
+        "phone": "79999999999"
+    }
+
+
+@pytest.fixture
+def error_not_authorized():
+    return 'Access denied! Available only for registered users.'
+
+
+@pytest.fixture
+def contact_edit_correct():
+    return {
+        "city": "Москва",
+        "street": "Сталина",
+        "house": "99",
+        "phone": "71111111111",
+        "id": "1",
+        "structure" : "test",
+        "building" : "test",
+        "apartment" : "test"
+    }
