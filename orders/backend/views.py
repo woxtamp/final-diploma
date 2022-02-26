@@ -25,11 +25,11 @@ class PartnerPriceLoad(APIView):
 
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False,
-                                 'Error': 'Ошибка доступа! Доступно только зарегистрированным пользователям'},
+                                 'Error': 'Access denied! Available only for registered users.'},
                                 status=403)
 
         if request.user.type != 'shop':
-            return JsonResponse({'Status': False, 'Error': 'Ошибка доступа! Доступно только для магазинов'},
+            return JsonResponse({'Status': False, 'Error': 'Access denied! Available only for shops.'},
                                 status=403)
 
         file = request.data.get('url')
@@ -62,7 +62,7 @@ class PartnerPriceLoad(APIView):
 
             return JsonResponse({'Status': True})
 
-        return JsonResponse({'Status': False, 'Errors': 'Ошибка! Не заполнены все обязательные поля'})
+        return JsonResponse({'Status': False, 'Errors': 'Input Error! All required fields are not filled.'})
 
 
 class CategoryView(ReadOnlyModelViewSet):
@@ -119,9 +119,9 @@ class UserLogin(APIView):
 
                     return JsonResponse({'Status': True, 'Token': token.key})
 
-            return JsonResponse({'Status': False, 'Errors': 'Ошибка авторизации'})
+            return JsonResponse({'Status': False, 'Errors': 'Authorisation Error.'})
 
-        return JsonResponse({'Status': False, 'Errors': 'Ошибка! Не заполнены все обязательные поля'})
+        return JsonResponse({'Status': False, 'Errors': 'Input Error! All required fields are not filled.'})
 
 
 class UserRegister(APIView):
@@ -145,7 +145,7 @@ class UserRegister(APIView):
                 else:
                     return JsonResponse({'Status': False, 'Errors': user_serializer.errors})
 
-        return JsonResponse({'Status': False, 'Errors': 'Ошибка! Не заполнены все обязательные поля'})
+        return JsonResponse({'Status': False, 'Errors': 'Input Error! All required fields are not filled.'})
 
 
 class PartnerOrdersView(APIView):
@@ -153,11 +153,11 @@ class PartnerOrdersView(APIView):
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False,
-                                 'Error': 'Ошибка доступа! Доступно только зарегистрированным пользователям'},
+                                 'Error': 'Access denied! Available only for registered users.'},
                                 status=403)
 
         if request.user.type != 'shop':
-            return JsonResponse({'Status': False, 'Error': 'Ошибка доступа! Доступно только для магазинов'},
+            return JsonResponse({'Status': False, 'Error': 'Access denied! Available only for shops.'},
                                 status=403)
 
         order = Order.objects.filter(
@@ -173,7 +173,7 @@ class BasketView(APIView):
     def get(self, request):
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False,
-                                 'Error': 'Ошибка доступа! Доступно только зарегистрированным пользователям'},
+                                 'Error': 'Input Error! All required fields are not filled.'},
                                 status=403)
         basket = Order.objects.filter(
             user_id=request.user.id, state='basket').prefetch_related(
@@ -185,7 +185,7 @@ class BasketView(APIView):
     def post(self, request):
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False,
-                                 'Error': 'Ошибка доступа! Доступно только зарегистрированным пользователям'},
+                                 'Error': 'Input Error! All required fields are not filled.'},
                                 status=403)
 
         items = request.data.get('ordered_items')
@@ -198,8 +198,8 @@ class BasketView(APIView):
 
                 exists_item = OrderItem.objects.filter(order=basket.id, product_info=item["product_info"])
                 if len(exists_item) > 0:
-                    return JsonResponse({'Status': False, 'Errors': f'Позиция {item["product_info"]} '
-                                                                    f' уже добавлена'})
+                    return JsonResponse({'Status': False, 'Errors': f'Position {item["product_info"]} '
+                                                                    f' already added.'})
 
                 item.update({'order': basket.id})
                 serializer = OrderItemSerializer(data=item)
@@ -209,15 +209,15 @@ class BasketView(APIView):
                 else:
                     return JsonResponse({'Status': False, 'Errors': serializer.errors})
 
-            return JsonResponse({'Status': True, 'Создано позиций': objects_created})
+            return JsonResponse({'Status': True, 'Positions created:': objects_created})
 
-        return JsonResponse({'Status': False, 'Errors': 'Ошибка! Не заполнены все обязательные поля'})
+        return JsonResponse({'Status': False, 'Errors': 'Input Error! All required fields are not filled.'})
 
     # удалить позиции из корзины
     def delete(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False,
-                                 'Error': 'Ошибка доступа! Доступно только зарегистрированным пользователям'},
+                                 'Error': 'Access denied! Available only for registered users.'},
                                 status=403)
 
         items = request.data.get('ordered_items')
@@ -231,14 +231,14 @@ class BasketView(APIView):
 
             deleted_count = OrderItem.objects.filter(query).delete()[0]
 
-            return JsonResponse({'Status': True, 'Удалено позиций': deleted_count})
+            return JsonResponse({'Status': True, 'Positions deleted': deleted_count})
 
-        return JsonResponse({'Status': False, 'Errors': 'Ошибка! Не заполнены все обязательные поля'})
+        return JsonResponse({'Status': False, 'Errors': 'Input Error! All required fields are not filled.'})
 
     def put(self, request):
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False,
-                                 'Error': 'Ошибка доступа! Доступно только зарегистрированным пользователям'},
+                                 'Error': 'Access denied! Available only for registered users.'},
                                 status=403)
 
         items = request.data.get('ordered_items')
@@ -251,16 +251,16 @@ class BasketView(APIView):
                 objects_updated += OrderItem.objects.filter(order_id=basket.id, product_info=item['product_info']).\
                     update(quantity=item['quantity'])
 
-                return JsonResponse({'Status': True, 'Обновлено объектов': objects_updated})
+                return JsonResponse({'Status': True, 'Objects updated': objects_updated})
 
-        return JsonResponse({'Status': False, 'Errors': 'Ошибка! Не заполнены все обязательные поля'})
+        return JsonResponse({'Status': False, 'Errors': 'Input Error! All required fields are not filled.'})
 
 
 class ContactView(APIView):
     def get(self, request):
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False,
-                                 'Error': 'Ошибка доступа! Доступно только зарегистрированным пользователям'},
+                                 'Error': 'Access denied! Available only for registered users.'},
                                 status=403)
         contact = Contact.objects.filter(user_id=request.user.id)
         serializer = ContactSerializer(contact, many=True)
@@ -269,7 +269,7 @@ class ContactView(APIView):
     def post(self, request):
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False,
-                                 'Error': 'Ошибка доступа! Доступно только зарегистрированным пользователям'},
+                                 'Error': 'Access denied! Available only for registered users.'},
                                 status=403)
 
         if {'city', 'street', 'house', 'phone'}.issubset(request.data):
@@ -283,12 +283,12 @@ class ContactView(APIView):
             else:
                 return JsonResponse({'Status': False, 'Errors': serializer.errors})
 
-        return JsonResponse({'Status': False, 'Errors': 'Ошибка! Не заполнены все обязательные поля'})
+        return JsonResponse({'Status': False, 'Errors': 'Input Error! All required fields are not filled.'})
 
     def put(self, request):
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False,
-                                 'Error': 'Ошибка доступа! Доступно только зарегистрированным пользователям'},
+                                 'Error': 'Access denied! Available only for registered users.'},
                                 status=403)
 
         if 'id' in request.data:
@@ -306,12 +306,12 @@ class ContactView(APIView):
                     else:
                         return JsonResponse({'Status': False, 'Errors': serializer.errors})
 
-        return JsonResponse({'Status': False, 'Errors': 'Ошибка! Не заполнены все обязательные поля'})
+        return JsonResponse({'Status': False, 'Errors': 'Input Error! All required fields are not filled.'})
 
     def delete(self, request):
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False,
-                                 'Error': 'Ошибка доступа! Доступно только зарегистрированным пользователям'},
+                                 'Error': 'Access denied! Available only for registered users.'},
                                 status=403)
 
         contact_id = request.data.get('id')
@@ -321,7 +321,7 @@ class ContactView(APIView):
                 Contact.objects.filter(Q(user_id=request.user.id, id=contact_id)).delete()
                 return JsonResponse({'Status': True})
 
-        return JsonResponse({'Status': False, 'Errors': 'Ошибка! Не заполнены все обязательные поля'})
+        return JsonResponse({'Status': False, 'Errors': 'Input Error! All required fields are not filled.'})
 
 
 class OrderView(APIView):
@@ -329,7 +329,7 @@ class OrderView(APIView):
     def get(self, request):
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False,
-                                 'Error': 'Ошибка доступа! Доступно только зарегистрированным пользователям'},
+                                 'Error': 'Access denied! Available only for registered users.'},
                                 status=403)
 
         order = Order.objects.filter(
@@ -343,7 +343,9 @@ class OrderView(APIView):
 
     def post(self, request):
         if not request.user.is_authenticated:
-            return JsonResponse({'Status': False, 'Error': 'Ошибка доступа! Доступно только зарегистрированным пользователям'}, status=403)
+            return JsonResponse({'Status': False,
+                                 'Error': 'Access denied! Available only for registered users.'},
+                                status=403)
 
         id_order = request.data['id']
 
@@ -352,10 +354,10 @@ class OrderView(APIView):
             data = Order.objects.filter(id=id_order, user=request.user.id, state='basket')
 
             if len(data) == 0:
-                return JsonResponse({'Status': False, 'Errors': 'Ошибка! Корзина не найдена'})
+                return JsonResponse({'Status': False, 'Errors': 'Error! Shopping cart not found.'})
 
             data.update(state='new')
 
             return JsonResponse({'Status': True})
 
-        return JsonResponse({'Status': False, 'Errors': 'Ошибка! Не заполнены все обязательные поля'})
+        return JsonResponse({'Status': False, 'Errors': 'Input Error! All required fields are not filled.'})

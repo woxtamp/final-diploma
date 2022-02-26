@@ -5,3 +5,4 @@ requests~=2.26.0
 PyYAML~=6.0
 django-filter~=21.1
 psycopg2-binary
+pytest~=7.0.1

@@ -53,7 +53,6 @@ SOCIAL_AUTH_VK_OAUTH2_KEY = os.getenv('vk_key')
 SOCIAL_AUTH_VK_OAUTH2_SECRET = os.getenv('vk_secret')
 
 LOGIN_REDIRECT_URL = '/'
-
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
 
 SOCIAL_AUTH_PIPELINE = [
@@ -76,8 +75,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'social_django.context_processors.backends',
-    'social_django.context_processors.login_redirect',
 ]
 
 ROOT_URLCONF = 'orders.urls'
@@ -93,6 +90,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
             ],
         },
     },
@@ -104,14 +102,25 @@ WSGI_APPLICATION = 'orders.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.getenv('db_name'),
+#         'HOST': os.getenv('db_host'),
+#         'PORT': os.getenv('db_port'),
+#         'USER': os.getenv('db_user'),
+#         'PASSWORD': os.getenv('db_password'),
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('db_name'),
-        'HOST': os.getenv('db_host'),
-        'PORT': os.getenv('db_port'),
-        'USER': os.getenv('db_user'),
-        'PASSWORD': os.getenv('db_password'),
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 
@@ -164,8 +173,8 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.AnonRateThrottle',
     ],
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '1/sec',
-        'user': '3/sec'
+        'anon': '100/sec',
+        'user': '3000/sec'
     },
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
